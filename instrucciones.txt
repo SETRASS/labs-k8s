@@ -1,0 +1,160 @@
+# MINIKUBE
+
+minikube status
+
+
+#KUBECTL
+
+kubectl run --generator=run-pod/v1 nombre_pod --image nginx:alpine
+kubectl describe pod nombre_pod 
+kubectl api-resources
+kubectl delete pod nombre_pod
+kubectl get pod nombre_pod  -o yaml
+kubectl exec -it nombre_pod -- sh
+kubectl logs nombre_pod -f
+kubectl api-versions
+kubectl api-resources | grep Pod
+kubectl apply -f nombre_yaml
+kubectl logs doscont -c cont1
+spk add -U curl
+kubectl get pods -l app=backend
+
+kubectl label pods nombre_pod app=pod-label
+kubectl get deployment --show-labels
+
+kubectl rollout status
+kubectl rollout history deployment deployment-test
+kubect apply -f nombre_yaml --record
+
+kubectl rollout history deployment deployment-test --revision=2
+
+kubectl rollout undo deployment deployment-test --to-revision=3
+kubectl get svc -l app=front
+kubectl get pods -l app=front -o wide
+
+kubectl get nodes -o wide
+
+#pod temporal
+kubectl run --rm -ti podtest --image=nginx:alpine -- sh
+
+#Services
+--ClusterIP
+----Comunicación interna y por default
+--NodePort
+----Servicio que se expone fuera del ClusterIP
+----rangos de ip utilizables 30,000 - 32,767
+
+
+
+kubectl port-forward <podname> 7000:<podport>
+
+--namespace
+kubectl create namespace
+
+#Crear DNS 
+
+svcName+nsName+svc.cluster.local
+
+#Contexto
+kubectl config current-context
+kubectl config view
+
+kubectl config set-context ci-context --namespace=ci --cluster minikube --user=minikube
+
+kubectl config use-context ci-context
+
+
+#LIMITS AND REQUEST
+
+Limits --> Posibilidad de incremento temporal pero no garantizada
+Request --> Capacidad en recursos garantizados que tiene un pod
+
+Usar describe pod o get pod --o yaml para ver problemas
+
+archivos de limites de ram
+limit-ram --> Forma correcta que funciona bien
+limit-ram2 --> Cuando el pod requiere mas ram de la que es capaz
+limit-ram3 --> Cuando el pod requiere mas ram que la del nodo 
+
+archivos de limites de CPU 
+
+para ver los recursos sin el plugin de metricas
+limit-cpu --> Se le asigna mas, sin emargo, sigue funcionando bien
+limit-cpu2 --> se le asigna una cantidad enorme 
+
+#QoS Quality of Services
+kubectl get pod nombre_pod -o yaml | grep -i qos
+kubectl get pod nombre_pod -o yaml | grep -i limits -C3
+
+-Guaranteed --> Tiene garantizado lo mismo en limits y requests
+-Burstable  --> Que puede aumentar, osea que su limite es mayor al requests
+-BestEffort --> No tiene configurado nada, sus recursos escalan hasta lo que pueda y pueden dejar caer el nodo
+
+Limitar recursos segun namespace
+kubectl describe limitrange mem-cpu-limit-range -n dev
+
+
+#Resource Quota
+
+define los recursos de namespace
+
+kubectl describe resourcequotas
+
+#probes
+
+pruebas, diagnosticos que se ejecutan en un pod
+lo realiza el kubelet
+tipos: 
+
+--livenes  
+        --> ve si la app funciona como deberia        
+        --> cada x tiempo, si retorna 500, reinicia o mata el pod
+--readiness
+        --> si inicio como deberia                    
+        --> si no pasa el readines, no se expone al servicio
+--startup  
+        --> para aplicaciones que demoran en iniciar  
+        --> el readiness y el livenes no se ejecutaran hasta que este esté listo 
+
+
+formas
+--comando
+--tcp
+--http
+
+
+#REFERENCIAS
+cuando nosotros relizamos el comando "kubectl get pods nombre_pod -o yaml"
+vemos que hay muchas variables y data relacionado al pod
+las referencias sirven para inyectar variables del manifiesto y llevarlas al pod
+
+
+#CONFIGMAP
+no entendi
+
+kubectl create configmap nginx-config --from-file=configmaps-examples/nginx.conf
+kubectl create configmap nombre_cm --from-file=ruta_archivo
+
+
+#SECRETOS
+kubetl create secrete generic nombre_secret --from-file=ruta_archivo
+echo hola | base64
+echo aG9sYQo= | base64 --decode
+
+se encripta en base64 por defecto
+-- generic/opaque
+        -->
+-- 
+envsubst < secureyaml. > temp.yaml
+
+#INGRESS
+https://kubernetes.github.io/ingress-nginx/deploy/
+kubernetes baremetal
+
+minikube service nombre_svc --url -n nombre_ns
+
+sudo vi /etc/hosts  --> DNS local
+
+elastic search 
+kibana
+log stat

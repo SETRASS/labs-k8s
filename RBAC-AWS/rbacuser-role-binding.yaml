@@ -1,0 +1,25 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dev-rolebinding
+  namespace: development
+subjects:
+- kind: User
+  name: alfredo_reyes
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: angel_diaz
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: jorge_aguilar
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: nicolle_salazar
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: rolando_test
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: dev-role
+  apiGroup: rbac.authorization.k8s.io
