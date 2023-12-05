@@ -93,3 +93,37 @@ kubectl get pods -l env=dev
 ```
 ## Crear Replicas sets
 ## Explicar OwnerReferences
+
+
+
+
+kubectl rollout status deployments
+
+Crear Deployment dep.yaml
+
+Explicar Owner References
+
+Describir un Deployment
+
+Historico y Revisiones
+Hacer get rs
+kubectl rollout history deployment
+kubectl rollout undo deployment nombre --to-revision=3
+
+Que es un servicio 
+Crear un servicio -> service.yaml
+Describir Servicio
+Mostrar Endpoints
+Get endpoints
+
+Explicar ClusterIP
+Explicar NodePort
+
+Aplicar nodeport
+demostrar nodeport
+
+Explicar Balanceador de Carga
+
+
+## Actualizar sts
+kubectl rollout status statefulset/<nombre-del-StatefulSet>
